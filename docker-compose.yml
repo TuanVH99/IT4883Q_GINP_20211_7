@@ -1,5 +1,4 @@
-version: '3.8'
-
+version: "3.8"
 services:
   mysqldb:
     image: mysql:5.7
@@ -12,22 +11,42 @@ services:
       - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
     volumes:
       - db:/var/lib/mysql
-  app:
+    networks:
+      - backend
+
+  be-api:
     depends_on:
       - mysqldb
-    build: ./Backend
+    build: ./be-api
     restart: unless-stopped
     env_file: ./.env
     ports:
-      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+      #- $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+      - 8080:8080
     environment:
       - DB_HOST=mysqldb
       - DB_USER=$MYSQLDB_USER
       - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - DB_NAME=$MYSQLDB_DATABASE
       - DB_PORT=$MYSQLDB_DOCKER_PORT
-    stdin_open: true
-    tty: true
+      #- CLIENT_ORIGIN=$CLIENT_ORIGIN
+      - CLIENT_ORIGIN=http://127.0.0.1:8081
+    networks:
+      - backend
 
-volumes: 
+  ui:
+    depends_on:
+      - be-api
+    build:
+      context: ./ui
+      args:
+        - REACT_APP_API_BASE_URL=http://127.0.0.1:8080/api
+    ports:
+      - 3000:8081
+    networks:
+      - frontend
+volumes:
   db:
+networks:
+  frontend:
+  backend:
