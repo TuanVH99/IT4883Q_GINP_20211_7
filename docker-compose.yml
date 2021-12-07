@@ -9,8 +9,10 @@ services:
       - MYSQL_DATABASE=$MYSQLDB_DATABASE
     ports:
       - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    command: --init-file /data/application/init.sql
     volumes:
       - db:/var/lib/mysql
+      - ./init.sql:/data/application/init.sql
     networks:
       - backend
 
@@ -21,32 +23,31 @@ services:
     restart: unless-stopped
     env_file: ./.env
     ports:
-      #- $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
-      - 8080:8080
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
     environment:
-      - DB_HOST=mysqldb
+      - DB_HOST=$MYSQLDB_HOST
       - DB_USER=$MYSQLDB_USER
       - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - DB_NAME=$MYSQLDB_DATABASE
       - DB_PORT=$MYSQLDB_DOCKER_PORT
       #- CLIENT_ORIGIN=$CLIENT_ORIGIN
-      - CLIENT_ORIGIN=http://127.0.0.1:8081
+      # - CLIENT_ORIGIN=http://127.0.0.1:8081
     networks:
       - backend
 
-  ui:
-    depends_on:
-      - be-api
-    build:
-      context: ./ui
-      args:
-        - REACT_APP_API_BASE_URL=http://127.0.0.1:8080/api
-    ports:
-      - 3000:8081
-    networks:
-      - frontend
+  # ui:
+  #   depends_on:
+  #     - be-api
+  #   build:
+  #     context: ./ui
+  #     args:
+  #       - REACT_APP_API_BASE_URL=http://127.0.0.1:8080/api
+  #   ports:
+  #     - 3000:8081
+  #   networks:
+  #     - frontend
 volumes:
   db:
 networks:
-  frontend:
+  # frontend:
   backend:

@@ -1,8 +1,9 @@
 module.exports = {
-    HOST:'localhost',
-    USER:'root',
-    PASSWORD:'admin',
-    DB:'testdb',
-    dialect:'mysql',
-    port:'3306'
-}
+  //   HOST: "localhost",
+  HOST: process.env.DB_HOST,
+  USER: process.env.DB_USER,
+  PASSWORD: process.env.DB_ROOT_PASSWORD,
+  DB: process.env.DB_DATABASE,
+  dialect: "mysql",
+  port: "3306",
+};

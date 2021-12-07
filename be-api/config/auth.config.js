@@ -1,3 +1,3 @@
 module.exports = {
-    secret:"chatApp-key"
+    secret:process.env.SECRET_KEY
 }
