@@ -1,5 +1,4 @@
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import React, { Component } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -8,6 +7,7 @@ import "./App.css";
 import AddTutorial from "./components/add-tutorial.component";
 import Tutorial from "./components/tutorial.component";
 import TutorialsList from "./components/tutorials-list.component";
+import Login from "./components/Login";
 
 class App extends Component {
   render() {
@@ -28,7 +28,13 @@ class App extends Component {
                 Add
               </Link>
             </li>
+            <li className="nav-item-left">
+              <Link to="/login" className="nav-link">
+                Login
+              </Link>
+            </li>
           </div>
+
         </nav>
 
         <div className="container mt-3">
@@ -37,6 +43,7 @@ class App extends Component {
             <Route path="/tutorials//" element={<TutorialsList />} />
             <Route path="/add/*" element={<AddTutorial />} />
             <Route path="/tutorials/:id" element={<Tutorial />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </div>
       </div>
