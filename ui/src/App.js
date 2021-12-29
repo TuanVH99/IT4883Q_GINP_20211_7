@@ -1,19 +1,11 @@
 import "./App.css";
-<<<<<<< HEAD
-import React, { useState, useEffect } from "react";
-=======
-import React, { Component } from "react";
->>>>>>> 16e78242146003b2ff38a3d70a102b669acf84d6
+import React, { Component, useState, useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-<<<<<<< HEAD
 import AuthService from "./services/auth.service";
 
-// import AddTutorial from "./components/add-tutorial.element";
-// import Tutorial from "./components/tutorial.element";
-// import TutorialsList from "./components/tutorials-list.element";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
@@ -55,22 +47,6 @@ const App = () => {
           </li>
 
           {showModeratorBoard && (
-=======
-import AddTutorial from "./components/add-tutorial.component";
-import Tutorial from "./components/tutorial.component";
-import TutorialsList from "./components/tutorials-list.component";
-import Login from "./components/Login";
-
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <a href="/tutorials" className="navbar-brand">
-            bezKoder
-          </a>
-          <div className="navbar-nav mr-auto">
->>>>>>> 16e78242146003b2ff38a3d70a102b669acf84d6
             <li className="nav-item">
               <Link to={"/mod"} className="nav-link">
                 Moderator Board
@@ -84,7 +60,6 @@ class App extends Component {
                 Admin Board
               </Link>
             </li>
-<<<<<<< HEAD
           )}
 
           {currentUser && (
@@ -94,25 +69,6 @@ class App extends Component {
               </Link>
             </li>
           )}
-=======
-            <li className="nav-item-left">
-              <Link to="/login" className="nav-link">
-                Login
-              </Link>
-            </li>
-          </div>
-
-        </nav>
-
-        <div className="container mt-3">
-          <Routes>
-            <Route path="/*" element={<TutorialsList />} />
-            <Route path="/tutorials//" element={<TutorialsList />} />
-            <Route path="/add/*" element={<AddTutorial />} />
-            <Route path="/tutorials/:id" element={<Tutorial />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
->>>>>>> 16e78242146003b2ff38a3d70a102b669acf84d6
         </div>
 
         {currentUser ? (

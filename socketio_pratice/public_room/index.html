@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+   <head>
+      <title>Hello world</title>
+      <style>
+         #main {
+            border: 1px solid black;
+            width: 500px;
+            height: 500px;
+            overflow: auto;
+         }
+
+         #list-users {
+            position: absolute;
+            border: 1px solid aqua;
+            width: 200px;
+            height: 500px;
+            top: 65px;
+            left: 550px;
+         }
+      </style>
+   </head>
+
+
+
+   <body>
+      <div id="username-input">
+
+         <div id="username"></div>
+         <br />
+         <input type="text" name="username" id="input-username">
+         <button id="login-button">Roll in</button>
+      </div>
+      <br />
+
+      <div id="chat-window">
+         <div id="main">
+         </div>
+         <br />
+         <input type="text" name="message" id="input-msg" disabled>
+         <button id="send-msg">
+            Send
+         </button>
+      </div>
+      <div id="list-users"></div>
+
+      <script src="/socket.io/socket.io.js"></script>
+      <script>
+         var socket = io();
+         // var
+         var inputUsername = document.getElementById("input-username")
+         var username = document.getElementById("username")
+         var loginButton = document.getElementById("login-button")
+         var inputMsg = document.getElementById('input-msg')
+         var sendMsg = document.getElementById('send-msg')
+         var main = document.getElementById('main')
+         var users = document.getElementById('list-users');
+         var user
+         // function 
+         function setUsername() {
+            socket.emit('setUsername', inputUsername.value)
+         }
+         function sendMessage() {
+            let value = inputMsg.value
+            if (!value) return
+            socket.emit('msg', { user: user, message: value })
+            inputMsg.value = ''
+         }
+         // set username
+         loginButton.addEventListener('click', setUsername)
+         // check username
+         socket.on('userExists', (data) => {
+            username.innerHTML = data
+         })
+         // username ok
+         socket.on('userSet', (data) => {
+            username.innerHTML = "Hello, " + data.username
+            inputMsg.disabled = false
+            user = data.username
+         })
+         // start chat
+         // emit msg
+         sendMsg.addEventListener('click', sendMessage);
+         // on msg
+         socket.on('newmsg', (data) => {
+            main.innerHTML += '<br/>' + data.user + ' : ' + data.message
+         })
+         // list user online
+         socket.on('listUser', (data) => {
+            let tmp = [...data]
+            users.innerHTML = " "
+            tmp.forEach(element => {
+               users.innerHTML += `<div>${element}</div>`
+            });
+         })
+      </script>
+   </body>
+
+</html>
