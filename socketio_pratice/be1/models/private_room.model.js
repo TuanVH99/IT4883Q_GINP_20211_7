@@ -1,4 +1,4 @@
-const { DataTypes, Deferrable } = require("sequelize/dist");
+const { DataTypes, Deferrable } = require("sequelize");
 const userModel = require("./user.model");
 
 module.exports = (sequelize, Sequelize) => {
@@ -9,18 +9,18 @@ module.exports = (sequelize, Sequelize) => {
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    user1id: {
-      type: DataTypes.UUID,
-      reference: userModel,
-      key: "userid",
-      deferrable: Deferrable.NOT,
-    },
-    user2id: {
-      type: DataTypes.UUID,
-      reference: userModel,
-      key: "userid",
-      deferrable: Deferrable.NOT,
-    },
+    // user1id: {
+    //   type: DataTypes.UUID,
+    //   reference: userModel,
+    //   key: "userid",
+    //   deferrable: Deferrable.NOT,
+    // },
+    // user2id: {
+    //   type: DataTypes.UUID,
+    //   reference: userModel,
+    //   key: "userid",
+    //   deferrable: Deferrable.NOT,
+    // },
   });
   return PrivateRoom;
 };

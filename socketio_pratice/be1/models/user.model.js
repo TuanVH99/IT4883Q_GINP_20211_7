@@ -1,29 +1,28 @@
-const { DataTypes } = require("sequelize/dist");
 module.exports = (sequelize, Sequelize) => {
   const User = sequelize.define("users", {
     userid: {
-      type: DataTypes.UUIDV4,
+      type: Sequelize.UUID,
       allowNull: false,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
+      defaultValue: Sequelize.UUIDV4,
     },
     username: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false,
     },
     account: {
-      type: DataTypes.STRING(16),
+      type: Sequelize.STRING(16),
       allowNull: false,
     },
     email: {
-      type: DataTypes.STRING(30),
+      type: Sequelize.STRING(30),
     },
     password: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false,
     },
     status: {
-      type: DataTypes.BOOLEAN,
+      type: Sequelize.BOOLEAN,
       defaultValue: false,
     },
   });

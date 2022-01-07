@@ -17,7 +17,7 @@ db.privateRoom = require("./private_room.model")(sequelize, Sequelize);
 db.msgPrivate = require("./msg_private.model")(sequelize, Sequelize);
 db.group_room = require("./group_room.model")(sequelize, Sequelize);
 db.msgGroup = require("./msg_group.model")(sequelize, Sequelize);
-db.groupUser = require("./group_user.model")(sequelize, Sequelize);
+// db.groupUser = require("./group_user.model")(sequelize, Sequelize);
 //----relationships----
 //----initialize variable----
 

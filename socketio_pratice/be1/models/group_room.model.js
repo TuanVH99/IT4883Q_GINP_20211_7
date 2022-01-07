@@ -1,25 +1,23 @@
-const { DataTypes } = require("sequelize/dist");
-const userModel = require("./user.model");
 module.exports = (sequelize, Sequelize) => {
   const GroupRoom = sequelize.define("group_rooms", {
     groupid: {
-      type: DataTypes.UUIDV4,
+      type: Sequelize.UUID,
       allowNull: false,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
+      defaultValue: Sequelize.UUIDV4,
     },
     gname: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
     },
     description: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
     },
-    owner: {
-      type: DataTypes.UUIDV,
-      reference: userModel,
-      key: "userid",
-      deferrable: Deferrable.NOT,
-    },
+    // owner: {
+    //   type: DataTypes.UUIDV,
+    //   reference: userModel,
+    //   key: "userid",
+    //   deferrable: Deferrable.NOT,
+    // },
   });
   return GroupRoom;
 };
