@@ -52,8 +52,8 @@ db.msgGroup.belongsTo(db.msgGroup, { foreignKey: "to_grp_id" });
 
 // ? users in a grp
 db.groupUser = sequelize.define("group_user", {});
-db.user.belongsToMany(db.group_room, { through: db.groupUser });
-db.group_room.belongsToMany(db.user, { through: db.groupUser });
+db.user.belongsToMany(db.group_room, { through: db.groupUser, unique: false });
+db.group_room.belongsToMany(db.user, { through: db.groupUser, unique: false });
 
 //----initialize variable----
 
