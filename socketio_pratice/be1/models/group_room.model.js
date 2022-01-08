@@ -5,6 +5,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
       primaryKey: true,
       defaultValue: Sequelize.UUIDV4,
+      unique: true,
     },
     gname: {
       type: Sequelize.STRING,
@@ -12,12 +13,6 @@ module.exports = (sequelize, Sequelize) => {
     description: {
       type: Sequelize.STRING,
     },
-    // owner: {
-    //   type: DataTypes.UUIDV,
-    //   reference: userModel,
-    //   key: "userid",
-    //   deferrable: Deferrable.NOT,
-    // },
   });
   return GroupRoom;
 };
