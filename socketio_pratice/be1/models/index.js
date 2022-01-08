@@ -35,10 +35,10 @@ db.msgPrivate.belongsTo(db.privateRoom, {
 });
 
 // ? 2 users in a chat
-db.user.hasMany(db.privateRoom, { as: "user_id1", foreignKey: "user_id1" });
-db.user.hasMany(db.privateRoom, { as: "user_id2", foreignKey: "user_id1" });
-db.privateRoom.belongsTo(db.user, { as: "user_id1", foreignKey: "user_id1" });
-db.privateRoom.belongsTo(db.user, { as: "user_id2", foreignKey: "user_id2" });
+db.user.hasMany(db.privateRoom, { foreignKey: "user_id1" });
+db.user.hasMany(db.privateRoom, { foreignKey: "user_id1" });
+db.privateRoom.belongsTo(db.user, { foreignKey: "user_id1" });
+db.privateRoom.belongsTo(db.user, { foreignKey: "user_id2" });
 
 // ? user create grp chat
 db.user.hasOne(db.group_room, { foreignKey: "owner" });

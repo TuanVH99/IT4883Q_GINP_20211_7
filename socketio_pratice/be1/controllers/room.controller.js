@@ -16,10 +16,11 @@ const createPrivateRoom = async (req, res) => {
   //     });
   try {
     const result = await private_room.create();
-    // const user1 = await user.findOne({ where: { userid: req.userId } });
-    // const user2 = await user.findOne({ where: { userid: req.targetId } });
+    const user1 = await user.findOne({ where: { userid: req.userId } });
+    const user2 = await user.findOne({ where: { userid: req.body.targetId } });
     // await result.setUserId1(user1);
     // await result.setUserId2(user2);
+    console.log(result)
     res.json({ message: "Create private chat successfully", data: msgRoom });
   } catch (error) {
     res
@@ -28,12 +29,12 @@ const createPrivateRoom = async (req, res) => {
   }
 };
 
-const createGroupRoom = (req, res) => {};
+const createGroupRoom = (req, res) => { };
 
-const addToGroupRoom = (req, res) => {};
+const addToGroupRoom = (req, res) => { };
 
-const leftRoom = (req, res) => {};
+const leftRoom = (req, res) => { };
 
-const kickFromRoom = (req, res) => {};
+const kickFromRoom = (req, res) => { };
 
 module.exports = { createPrivateRoom };
