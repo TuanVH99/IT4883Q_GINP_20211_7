@@ -7,9 +7,10 @@ const user = db.user;
 
 const getListPrivateRoom = async (req, res) => {
   try {
+    console.log(req.userId);
     const listRoom = await private_room.findAll({
       where: {
-        [Op.or]: [{ user_id1: req.userId }, { user_id2: req, userId }],
+        [Op.or]: [{ user_id1: req.userId }, { user_id2: req.userId }],
       },
       order: [["createdAt", "DESC"]],
       limit: 10,
@@ -76,13 +77,15 @@ const createPrivateRoom = async (req, res) => {
 const getListGroupRoom = async (req, res) => {
   try {
     const list = await groupUser.findAll({
-      where: {
-        userUserid: req.userId,
+      include: {
+        model: group_room,
+        where: {
+          userUserid: req.userId,
+        },
+        order: [["createdAt", "DESC"]],
+        limit: 10,
+        offset: req.query.rows ? req.query.rows : 0,
       },
-      order: [["createdAt", "DESC"]],
-      include: group_room,
-      limit: 10,
-      offset: req.query.rows ? req.query.rows : 0,
     });
 
     res.json({
