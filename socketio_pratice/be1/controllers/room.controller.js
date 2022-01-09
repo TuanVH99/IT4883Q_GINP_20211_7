@@ -76,16 +76,34 @@ const createPrivateRoom = async (req, res) => {
 
 const getListGroupRoom = async (req, res) => {
   try {
-    const list = await groupUser.findAll({
-      include: {
-        model: group_room,
-        where: {
-          userUserid: req.userId,
-        },
-        order: [["createdAt", "DESC"]],
-        limit: 10,
-        offset: req.query.rows ? req.query.rows : 0,
-      },
+    // const list = await groupUser.findAll({
+    //   include: {
+    //     model: group_room,
+    //     where: {
+    //       userUserid: req.userId,
+    //     },
+    //     order: [["createdAt", "DESC"]],
+    //     limit: 10,
+    //     offset: req.query.rows ? req.query.rows : 0,
+    //   },
+    // });
+
+    const list = await group_room.findAll({
+      // include: {
+      //   model: user,
+      //   through: {
+      //     where: {
+      //       userUserid: req.userId,
+      //     },
+      //   },
+      //   // where: {
+      //   //   userUserid: req.userId,
+      //   // },
+      //   // order: [["createdAt", "DESC"]],
+      //   // limit: 10,
+      //   // offset: req.query.rows ? req.query.rows : 0,
+      // },
+      include: user,
     });
 
     res.json({
