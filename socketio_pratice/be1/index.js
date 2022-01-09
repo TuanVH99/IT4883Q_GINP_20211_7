@@ -11,20 +11,20 @@ app.use(bodyParser.json());
 //----------------
 
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+    res.sendFile(__dirname + "/index.html");
 });
 
 app.get("/resetdb", (req, res) => {
-  db.sequelize
-    .sync({ force: true })
-    .then(() => {
-      console.log("Resync DB");
-      res.send("DB sync");
-    })
-    .catch((err) => {
-      console.log(err.message);
-      res.send("DB Sync Fail!");
-    });
+    db.sequelize
+        .sync({ force: true })
+        .then(() => {
+            console.log("Resync DB");
+            res.send("DB sync");
+        })
+        .catch((err) => {
+            console.log(err.message);
+            res.send("DB Sync Fail!");
+        });
 });
 
 //-------------define routes---------------
@@ -35,5 +35,5 @@ require("./routes/message.routes")(app);
 //-----------------------------------------
 
 http.listen(3000, () => {
-  console.log("App is running on port 3000");
+    console.log("App is running on port 3000");
 });

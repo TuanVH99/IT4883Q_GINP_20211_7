@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import Form from "react-validation/build/form";
 import input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-
+import { useNavigate } from "react-router-dom";
 import AuthService from "../services/auth.service";
 
 const required = (value) => {
@@ -18,6 +18,7 @@ const required = (value) => {
 const Login = (props) => {
   const form = useRef();
   const checkBtn = useRef();
+  const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -40,24 +41,23 @@ const Login = (props) => {
     setMessage("");
     setLoading(true);
 
+    AuthService.login(username, password).then(
+      () => {
+        navigate("/profile");
+        window.location.reload();
+      },
+      (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
 
-      AuthService.login(username, password).then(
-        () => {
-          props.history.push("/profile");
-          window.location.reload();
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-
-          setLoading(false);
-          setMessage(resMessage);
-        }
-      );
+        setLoading(false);
+        setMessage(resMessage);
+      }
+    );
   };
 
   // console.log(props)
@@ -70,7 +70,7 @@ const Login = (props) => {
           className="profile-img-card"
         />
 
-        <form onSubmit={handleLogin} ref={form} >
+        <form onSubmit={handleLogin} ref={form}>
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <input
@@ -109,7 +109,7 @@ const Login = (props) => {
               </div>
             </div>
           )}
-          <button style={{ display: "none" }}/>
+          <button style={{ display: "none" }} />
         </form>
       </div>
     </div>
