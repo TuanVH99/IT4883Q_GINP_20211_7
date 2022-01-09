@@ -48,8 +48,9 @@ const Register = (props) => {
   const checkBtn = useRef();
 
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
+  const [description, setDescription] = useState("");
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -58,10 +59,15 @@ const Register = (props) => {
     setUsername(username);
   };
 
-  const onChangeEmail = (e) => {
-    const email = e.target.value;
-    setEmail(email);
+  const onChangeAccount = (e) => {
+    const account = e.target.value;
+    setAccount(account);
   };
+
+  const onChangeDescription = (e) => {
+    const description = e.target.value;
+    setDescription(description)
+  }
 
   const onChangePassword = (e) => {
     const password = e.target.value;
@@ -75,7 +81,7 @@ const Register = (props) => {
     setSuccessful(false);
 
 
-      AuthService.register(username, email, password).then(
+      AuthService.register(username, account, description, password).then(
         (response) => {
           setMessage(response.data.message);
           setSuccessful(true);
@@ -119,13 +125,24 @@ const Register = (props) => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="account">Account</label>
                 <input
                   type="text"
                   className="form-control"
-                  name="email"
-                  value={email}
-                  onChange={onChangeEmail}
+                  name="account"
+                  value={account}
+                  onChange={onChangeAccount}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="description">Description</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="account"
+                  value={description}
+                  onChange={onChangeDescription}
                 />
               </div>
 
