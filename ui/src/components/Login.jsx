@@ -20,14 +20,14 @@ const Login = (props) => {
   const checkBtn = useRef();
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
+  const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const onChangeUsername = (e) => {
-    const username = e.target.value;
-    setUsername(username);
+  const onChangeAccount = (e) => {
+    const account = e.target.value;
+    setAccount(account);
   };
 
   const onChangePassword = (e) => {
@@ -41,7 +41,7 @@ const Login = (props) => {
     setMessage("");
     setLoading(true);
 
-    AuthService.login(username, password).then(
+    AuthService.login(account, password).then(
       () => {
         navigate("/profile");
         window.location.reload();
@@ -60,6 +60,7 @@ const Login = (props) => {
     );
   };
 
+  console.log(AuthService.currentUser)
   // console.log(props)
   return (
     <div className="col-md-12">
@@ -77,8 +78,8 @@ const Login = (props) => {
               type="text"
               className="form-control"
               name="username"
-              value={username}
-              onChange={onChangeUsername}
+              value={account}
+              onChange={onChangeAccount}
             />
           </div>
 
