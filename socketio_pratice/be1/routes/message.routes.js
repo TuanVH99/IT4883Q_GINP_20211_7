@@ -16,4 +16,11 @@ module.exports = function (app) {
     controller.getListPrivateMessage
   );
   app.post("/api/message/private", verifyToken, controller.sendPrivateMessage);
+  //---------------------------------------
+  app.get(
+    "/api/message/group/:groupId",
+    verifyToken,
+    controller.getListGroupMessage
+  );
+  app.post("/api/message/group", verifyToken, controller.sendGroupMessage);
 };

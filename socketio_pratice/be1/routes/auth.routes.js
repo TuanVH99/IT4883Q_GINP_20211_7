@@ -1,6 +1,6 @@
 const controller = require("../controllers/auth.controller");
-// * POST signup
-// * POST login
+
+
 module.exports = function (app) {
   app.use((req, res, next) => {
     res.header(

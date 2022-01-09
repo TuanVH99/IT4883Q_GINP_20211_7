@@ -1,11 +1,13 @@
 const { Op } = require("sequelize");
 const db = require("../models");
 const msgPrivate = db.msgPrivate;
-// const msgGroup = db.msgGroup;
-// const user = db.user;
+const msgGroup = db.msgGroup;
+const user = db.user;
 const privateRoom = db.privateRoom;
-// const groupRoom = db.group_room;
-// const groupUser = db.groupUser;
+const groupRoom = db.group_room;
+const groupUser = db.groupUser;
+
+//--------------------------------------------
 
 const _getListPrivateMessage = async (userId, targetId, rows) => {
   try {
@@ -97,5 +99,115 @@ const sendPrivateMessage = async (req, res) => {
 
 //--------------------------------------------
 
-const _getListGroupMessage
-module.exports = { getListPrivateMessage, sendPrivateMessage };
+const _getListGroupMessage = async (userId, groupId, rows) => {
+  try {
+    // ! Check if room is exist
+    const room = await groupRoom.findOne({
+      where: {
+        groupid: groupId,
+      },
+    });
+    if (!room) {
+      throw new Error("Group not found");
+    }
+    // ! Check if user is in this room
+    const userInRoom = await groupUser.findOne({
+      where: {
+        userUserid: userId,
+        groupRoomGroupid: groupId,
+      },
+    });
+    if (!userInRoom) {
+      throw new Error("You are not in this room!");
+    }
+    // ! Get list latest messages
+    const listMessage = await msgGroup.findAll({
+      where: {
+        groupRoomGroupid: groupId,
+      },
+      order: [["createdAt", "DESC"]],
+      limit: 25,
+      offset: rows ? rows : 0,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getListGroupMessage = async (req, res) => {
+  try {
+    const result = await _getListGroupMessage(
+      req.userId,
+      req.params.groupId,
+      req.query.rows
+    );
+  } catch (error) {
+    res.status(400).json({
+      message: "Get list message group fail",
+      messageDev: error.message,
+    });
+  }
+};
+
+const _sendGroupMessage = async (userId, groupId, message) => {
+  try {
+    // ! Check if room is exist
+    const room = await groupRoom.findOne({
+      where: {
+        groupid: groupId,
+      },
+    });
+    if (!room) {
+      throw new Error("Group not found");
+    }
+    // ! Check if user is in this room
+    const userInRoom = await groupUser.findOne({
+      where: {
+        userUserid: userId,
+        groupRoomGroupid: groupId,
+      },
+    });
+    if (!userInRoom) {
+      throw new Error("You are not in this room!");
+    }
+
+    const newMessage = await msgGroup.create({
+      message: message,
+      sender_user_id: userId,
+      to_group_id: groupId,
+    });
+    return newMessage;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const sendGroupMessage = async (req, res) => {
+  try {
+    const result = await _sendGroupMessage(
+      req.userId,
+      req.body.groupId,
+      req.body.message
+    );
+    res.json({
+      message: "Message sent!",
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Message send fail",
+      messageDev: error.message,
+    });
+  }
+};
+
+module.exports = {
+  _getListPrivateMessage,
+  _sendPrivateMessage,
+  _getListGroupMessage,
+  _sendGroupMessage,
+  getListPrivateMessage,
+  sendPrivateMessage,
+  getListGroupMessage,
+  sendGroupMessage,
+};

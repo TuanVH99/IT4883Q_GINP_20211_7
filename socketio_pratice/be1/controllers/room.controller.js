@@ -1,4 +1,4 @@
-const { Op } = require("sequelize/dist");
+const { Op } = require("sequelize");
 const db = require("../models");
 const private_room = db.privateRoom;
 const group_room = db.group_room;
@@ -11,8 +11,9 @@ const getListPrivateRoom = async (req, res) => {
       where: {
         [Op.or]: [{ user_id1: req.userId }, { user_id2: req, userId }],
       },
+      order: [["createdAt", "DESC"]],
       limit: 10,
-      offset: req.query.offset ? req.query.offset : 0,
+      offset: req.query.rows ? req.query.rows : 0,
     });
     res.json({
       message: "Gest list private room successfully!",
@@ -21,6 +22,16 @@ const getListPrivateRoom = async (req, res) => {
   } catch (error) {
     res.status(400).json({
       message: "Get list private rooms fail",
+      messageDev: error.message,
+    });
+  }
+};
+
+const getPrivateRoomInformation = async (req, res) => {
+  try {
+  } catch (error) {
+    res.status(400).json({
+      message: "Get information fail",
       messageDev: error.message,
     });
   }
@@ -62,6 +73,40 @@ const createPrivateRoom = async (req, res) => {
   }
 };
 
+const getListGroupRoom = async (req, res) => {
+  try {
+    const list = await groupUser.findAll({
+      where: {
+        userUserid: req.userId,
+      },
+      order: [["createdAt", "DESC"]],
+      include: group_room,
+      limit: 10,
+      offset: req.query.rows ? req.query.rows : 0,
+    });
+
+    res.json({
+      message: "Get list group room",
+      data: list,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Get list group rooms fail",
+      messageDev: error.message,
+    });
+  }
+};
+
+const getGroupRoomInformation = async (req, res) => {
+  try {
+  } catch (error) {
+    res.status(400).json({
+      message: "Get information fail",
+      messageDev: error.message,
+    });
+  }
+};
+
 const createGroupRoom = async (req, res) => {
   try {
     const currentUser = await user.findOne({ where: { userid: req.userId } });
@@ -76,7 +121,10 @@ const createGroupRoom = async (req, res) => {
       userUserid: currentUser.getDataValue("userid"),
       groupRoomGroupid: result.getDataValue("groupid"),
     });
-    res.json({ message: "Create group chat successfully", data: result });
+    res.json({
+      message: "Create group chat successfully",
+      data: { ...result, ...result2 },
+    });
   } catch (error) {
     res
       .status(400)
@@ -186,7 +234,9 @@ const kickFromRoom = async (req, res) => {
 };
 
 module.exports = {
+  getListPrivateRoom,
   createPrivateRoom,
+  getListGroupRoom,
   createGroupRoom,
   addToGroupRoom,
   leftRoom,
