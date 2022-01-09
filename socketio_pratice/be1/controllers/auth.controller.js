@@ -42,21 +42,35 @@ const checkDuplicateAccount = (req, res, next) => {
     });
 };
 
-const signup = (req, res) => {
-  // ? save user to db
-  user
-    .create({
+const signup = async (req, res) => {
+  // ! validate data
+
+  try {
+    let data = { ...req.body };
+    console.log(data);
+    for (const key in data) {
+      if (Object.hasOwnProperty.call(data, key)) {
+        const element = data[key];
+        if (element.trim() == "") {
+          throw new Error("Data conflict!");
+        }
+      }
+    }
+    const result = await user.create({
       username: req.body.username,
       account: req.body.account,
       description: req.body.description,
       password: bcrypt.hashSync(req.body.password, 8),
-    })
-    .then(() => {
-      res.json({ message: "Create account successfully!" });
-    })
-    .catch((err) => {
-      res.status(500).json({ message: err.message });
     });
+    if (!result) {
+      throw new Error("Create account fail!");
+    }
+    res.json({ message: "Create account successfully!", data: result });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Create account fail!", messageDev: error.message });
+  }
 };
 
 const login = (req, res) => {
