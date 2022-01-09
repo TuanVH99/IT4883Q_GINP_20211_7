@@ -1,13 +1,55 @@
+const { Op } = require("sequelize/dist");
 const db = require("../models");
 const private_room = db.privateRoom;
 const group_room = db.group_room;
 const groupUser = db.groupUser;
 const user = db.user;
 
+const getListPrivateRoom = async (req, res) => {
+  try {
+    const listRoom = await private_room.findAll({
+      where: {
+        [Op.or]: [{ user_id1: req.userId }, { user_id2: req, userId }],
+      },
+      limit: 10,
+      offset: req.query.offset ? req.query.offset : 0,
+    });
+    res.json({
+      message: "Gest list private room successfully!",
+      data: listRoom,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Get list private rooms fail",
+      messageDev: error.message,
+    });
+  }
+};
+
 const createPrivateRoom = async (req, res) => {
   try {
     const user1 = await user.findOne({ where: { userid: req.userId } });
     const user2 = await user.findOne({ where: { userid: req.body.targetId } });
+    if (!user2) {
+      throw new Error("User not Found!");
+    }
+    const roomExisted = await private_room.findOne({
+      where: {
+        [Op.or]: [
+          {
+            user_id1: user1.getDataValue("userid"),
+            user_id2: user2.getDataValue("userid"),
+          },
+          {
+            user_id1: user2.getDataValue("userid"),
+            user_id2: user1.getDataValue("userid"),
+          },
+        ],
+      },
+    });
+    if (roomExisted) {
+      throw new Error("Can't create new conversation!");
+    }
     const result = await private_room.create({
       user_id1: user1.getDataValue("userid"),
       user_id2: user2.getDataValue("userid"),
@@ -66,7 +108,6 @@ const addToGroupRoom = async (req, res) => {
       data: { ...room, ...result },
     });
   } catch (error) {
-    console.log(error);
     res.status(400).json({
       message: "Add member to group fail!",
       messageDev: error.message,
@@ -74,8 +115,80 @@ const addToGroupRoom = async (req, res) => {
   }
 };
 
-const leftRoom = (req, res) => {};
+const leftRoom = async (req, res) => {
+  try {
+    // ! check if user is in room, if owner left the rooom, somebody has to be the boss now :D
+    const room = await group_room.findOne({
+      where: {
+        groupid: req.body.groupid,
+      },
+    });
+    if (!room) {
+      throw new Error("Room not found!");
+    }
+    const userInRoom = await groupUser.findOne({
+      where: {
+        userUserid: req.userId,
+        groupRoomGroupid: req.body.groupid,
+      },
+    });
+    if (!userInRoom) {
+      throw new Error("You dont have permission to do that!");
+    }
+    await groupUser.destroy({
+      where: {
+        userUserid: req.userId,
+        groupRoomGroupid: req.body.groupid,
+      },
+    });
+    res.json({ message: "You have left the room successfully!" });
+  } catch (error) {
+    res.status(400).json({
+      message: "Leave group fail!",
+      messageDev: error.message,
+    });
+  }
+};
 
-const kickFromRoom = (req, res) => {};
+const kickFromRoom = async (req, res) => {
+  try {
+    // ! Only owner of the group can do that, check if user is in room
+    const room = await group_room.findOne({
+      where: {
+        groupid: req.body.groupid,
+      },
+    });
+    if (room.getDataValue("owner") != req.userId) {
+      throw new Error("You dont have permission to do that!");
+    }
+    const userInRoom = await groupUser.findOne({
+      where: {
+        userUserid: req.body.targetId,
+        groupRoomGroupid: req.body.groupid,
+      },
+    });
+    if (!userInRoom) {
+      throw new Error("User is not in this room");
+    }
+    await groupUser.destroy({
+      where: {
+        userUserid: req.userId,
+        groupRoomGroupid: req.body.groupid,
+      },
+    });
+    res.json({ message: "Kick user!" });
+  } catch (error) {
+    res.status(400).json({
+      message: "Kick user out of group fail!",
+      messageDev: error.message,
+    });
+  }
+};
 
-module.exports = { createPrivateRoom, createGroupRoom, addToGroupRoom };
+module.exports = {
+  createPrivateRoom,
+  createGroupRoom,
+  addToGroupRoom,
+  leftRoom,
+  kickFromRoom,
+};
