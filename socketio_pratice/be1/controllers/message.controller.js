@@ -44,7 +44,7 @@ const getListPrivateMessage = async (req, res) => {
       req.params.targetId,
       rows
     );
-    res.json({ message: "Message sent!", data: result });
+    res.json({ message: "Message got!", data: result });
   } catch (error) {
     res.status(400).json({
       message: "Get list message private fail",

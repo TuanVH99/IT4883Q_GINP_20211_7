@@ -7,6 +7,7 @@ const verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
 
   if (!token) {
+    console.log(req);
     return res.status(403).send({
       message: "No token provided!",
     });
@@ -28,7 +29,7 @@ const checkDuplicateAccount = (req, res, next) => {
   user
     .findOne({
       where: {
-        username: req.body.username,
+        account: req.body.account,
       },
     })
     .then((user) => {
