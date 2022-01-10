@@ -7,6 +7,11 @@ module.exports = function (http) {
   io.on("connection", function (socket) {
     console.log("An user has connected!");
     // console.log(socket);
+    //-------------------------
+    socket.emit("getHost", {
+      host1: process.env.DB_HOST,
+      host2: http.address(),
+    });
     //----------user------------
     socket.on("userOnline", (data) => {
       console.log(data);

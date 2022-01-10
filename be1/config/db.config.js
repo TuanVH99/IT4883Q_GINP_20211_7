@@ -1,10 +1,10 @@
 module.exports = {
-  HOST: "localhost",
-  USER: "root",
-  PASSWORD: "admin",
-  DB: "chatapp",
+  HOST: process.env.DB_HOST,
+  USER: process.env.DB_USER,
+  PASSWORD: process.env.DB_PASSWORD,
+  DB: process.env.DB_NAME,
   dialect: "mysql",
-  port: "3306",
+  port: process.env.DB_PORT,
 };
 
 // module.exports = {
