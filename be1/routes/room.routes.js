@@ -11,6 +11,11 @@ module.exports = (app) => {
   });
 
   app.get("/api/room/private", verifyToken, controller.getListPrivateRoom);
+  app.get(
+    "/api/room/private/:targetId",
+    verifyToken,
+    controller.getPrivateRoomInformation
+  );
   app.post("/api/room/private", verifyToken, controller.createPrivateRoom);
   //-------------------------------------------------------------------
   app.get("/api/room/group", verifyToken, controller.getListGroupRoom);

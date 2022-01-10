@@ -2,6 +2,7 @@ const app = require("express")();
 const http = require("http").Server(app);
 require("dotenv").config();
 const db = require("./models/index.js");
+require("./socket/index")(http);
 //----------------
 const cors = require("cors");
 const bodyParser = require("body-parser");

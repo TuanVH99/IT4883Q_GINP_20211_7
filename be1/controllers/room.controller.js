@@ -30,6 +30,31 @@ const getListPrivateRoom = async (req, res) => {
 
 const getPrivateRoomInformation = async (req, res) => {
   try {
+    const user1 = await user.findOne({ where: { userid: req.userId } });
+    const user2 = await user.findOne({
+      where: { userid: req.params.targetId },
+    });
+    if (!user2) {
+      throw new Error("User not Found!");
+    }
+    const roomExisted = await private_room.findOne({
+      where: {
+        [Op.or]: [
+          {
+            user_id1: user1.getDataValue("userid"),
+            user_id2: user2.getDataValue("userid"),
+          },
+          {
+            user_id1: user2.getDataValue("userid"),
+            user_id2: user1.getDataValue("userid"),
+          },
+        ],
+      },
+    });
+    if (!roomExisted) {
+      throw new Error("Conversation not found!");
+    }
+    res.json({ message: "Get private room data!", data: roomExisted });
   } catch (error) {
     res.status(400).json({
       message: "Get information fail",
@@ -255,6 +280,7 @@ const kickFromRoom = async (req, res) => {
 };
 
 module.exports = {
+  getPrivateRoomInformation,
   getListPrivateRoom,
   createPrivateRoom,
   getListGroupRoom,
