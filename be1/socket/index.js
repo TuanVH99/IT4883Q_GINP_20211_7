@@ -1,5 +1,9 @@
 module.exports = function (http) {
-  const io = require("socket.io")(http);
+  const io = require("socket.io")(http, {
+    cors: {
+      origin: "*",
+    },
+  });
   io.on("connection", function (socket) {
     console.log("An user has connected!");
     // console.log(socket);
