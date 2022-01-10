@@ -21,12 +21,6 @@ const App = () => {
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
-
-    if (user) {
-      setCurrentUser(user);
-      setShowModeratorBoard(user.roles.includes("ROLE_MODERATOR"));
-      setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
-    }
   }, []);
 
   const logOut = () => {
@@ -107,9 +101,6 @@ const App = () => {
           <Route exact path="/login" element={<Login />}></Route>
           <Route exact path="/register" element={<Register />}></Route>
           <Route exact path="/profile" element={<Profile />}></Route>
-          <Route path="/user" element={<BoardUser />}></Route>
-          <Route path="/mod" element={<BoardModerator />}></Route>
-          <Route path="/admin" element={<BoardAdmin />}></Route>
         </Routes>
       </div>
     </div>
