@@ -13,4 +13,5 @@ module.exports = (app) => {
   });
 
   app.get("/api/user/info", verifyToken, controller.getInformation);
+  app.get("/api/user/all", verifyToken, controller.getListOfUser);
 };

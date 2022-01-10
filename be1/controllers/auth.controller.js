@@ -89,7 +89,7 @@ const login = (req, res) => {
 
       if (!passIsValid) {
         return res
-          .staus(401)
+          .status(401)
           .json({ message: "Password invalid", accessToken: null });
       }
 

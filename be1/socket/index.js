@@ -19,6 +19,11 @@ module.exports = function (http) {
       console.log(data["to_room_id"]);
       io.to(data["to_room_id"]).emit("newPrivateMessage", data);
     });
+    //----------Call------------
+    socket.on("wait4VoiceCall", (data) => {
+      console.log("some user want to make a voice call!");
+      io.to(data.room).emit("ready4Call", data);
+    });
     //-----------------------------
     socket.on("disconnect", function () {
       console.log("An user has disconnected");
