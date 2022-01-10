@@ -1,31 +1,31 @@
 import React, { useState, useEffect } from "react";
+import { io } from "socket.io-client";
 
-import UserService from "../services/user.service";
+const socket = io("http://localhost:3000");
 
 const Home = () => {
-  const [content, setContent] = useState("");
+  const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    UserService.getPublicContent().then(
-      (response) => {
-        setContent(response.data);
-      },
-      (error) => {
-        const _content =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-
-        setContent(_content);
-      }
-    );
-  }, []);
+  const handleClick = (e) => {
+      e.preventDefault();
+      console.log(message)
+      setMessage("")
+  }
 
   return (
     <div className="container">
       <header className="jumbotron">
-        <h3>{content}</h3>
+        <h3>Welcome</h3>
       </header>
+      <form>
+      <input
+      placeholder="type something"
+        type="text"
+        onChange={(e) => setMessage(e.target.value)}
+        value={message}
+      />
+      <button onClick={handleClick} >send</button>
+      </form>
     </div>
   );
 };

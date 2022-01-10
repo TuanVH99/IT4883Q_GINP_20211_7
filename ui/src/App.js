@@ -97,7 +97,8 @@ const App = () => {
 
       <div className="container mt-3">
         <Routes>
-          <Route exact path={"/"} element={<Home />}></Route>
+          <Route  path={"/"} element={<Home />}></Route>
+          <Route path={"/home"} element={<Home />}></Route>
           <Route exact path="/login" element={<Login />}></Route>
           <Route exact path="/register" element={<Register />}></Route>
           <Route exact path="/profile" element={<Profile />}></Route>
