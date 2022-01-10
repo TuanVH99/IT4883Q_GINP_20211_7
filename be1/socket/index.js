@@ -20,9 +20,13 @@ module.exports = function (http) {
       io.to(data["to_room_id"]).emit("newPrivateMessage", data);
     });
     //----------Call------------
-    socket.on("wait4VoiceCall", (data) => {
+    socket.on("want4Call", (data) => {
       console.log("some user want to make a voice call!");
-      io.to(data.room).emit("ready4Call", data);
+      socket.broadcast.to(data.room).emit("ready4Call", data);
+    });
+    socket.on("ok2Call", (data) => {
+      console.log("ready for call");
+      socket.broadcast.to(data.room).emit("canCall", data);
     });
     //-----------------------------
     socket.on("disconnect", function () {

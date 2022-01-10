@@ -3,12 +3,25 @@ const http = require("http").Server(app);
 require("dotenv").config();
 const db = require("./models/index.js");
 require("./socket/index")(http);
+const { PeerServer } = require("peer");
+
+const customGenerationFunction = () =>
+  (Math.random().toString(36) + "0000000000000000000").substr(2, 16);
+const peerServer = PeerServer({
+  port: 9000,
+  path: "/",
+  generateClientId: customGenerationFunction,
+});
+
 //----------------
 const cors = require("cors");
 const bodyParser = require("body-parser");
 //-------middleware---------
 app.use(cors({ origin: "*" }));
 app.use(bodyParser.json());
+peerServer.on("connection", (client) => {
+  console.log("A peer user connected");
+});
 //----------------
 
 app.get("/", (req, res) => {

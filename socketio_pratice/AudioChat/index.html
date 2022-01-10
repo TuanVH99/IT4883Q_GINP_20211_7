@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>test</title>
+        <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+        <!-- <script src="//www.WebRTC-Experiment.com/RecordRTC.js"></script> -->
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    </head>
+
+    <body>
+
+        <button id="get-id">get id</button>
+        <input type="text" id="other-id">
+        <button id="start-call">start call</button>
+        chrome://flags/#unsafely-treat-insecure-origin-as-secure
+        <br />
+        <br />
+        <video id="local" width="300" controls></video>
+        <br />
+        <br />
+        <video id="remote" width="300" controls></video>
+        <script>
+            var socket = io();
+            var currentId
+            socket.on("connect", () => {
+
+            });
+
+        </script>
+        <script>
+
+            // const a = customGenerationFunction();
+
+            const peer = new Peer({
+                host: '192.168.1.8',
+                port: 9000,
+                path: '/'
+            });
+
+
+
+            $("#get-id").on('click', function () {
+                try {
+                    socket.emit("myId", currentId);
+                } catch (error) {
+                    console.log(error)
+                }
+            })
+            socket.on('getId', data => { console.log(data) })
+
+
+            $("#start-call").on('click', function () {
+                openStream().then(stream => {
+                    console.log("local stream started");
+                    playStream('local', stream);
+                    const call = peer.call($('#other-id').val(), stream)
+                    call.on('stream', remoteStream => playStream('remote', remoteStream))
+                })
+            })
+
+            peer.on('call', call => {
+                console.log(1)
+                openStream().then(stream => {
+                    call.answer(stream);
+                    playStream('local', stream);
+                    call.on('stream', remoteStream =>
+                        playStream('remote', remoteStream)
+                    )
+                }).catch(error => { console.error(error) })
+            })
+            //--------------
+            function openStream() {
+                const config = { audio: true, video: true }
+                return navigator.mediaDevices.getUserMedia(config);
+            }
+            function playStream(idVideoTag, stream) {
+                const video = document.getElementById(idVideoTag)
+                video.srcObject = stream
+                video.play()
+            }
+            // openStream().then(stream => playStream('local', stream))
+
+            peer.on('open', id => {
+                try {
+                    console.log("peer server open!")
+                    console.log(id)
+                } catch (error) {
+                    console.log(error)
+                }
+            })
+
+        </script>
+    </body>
+
+</html>
