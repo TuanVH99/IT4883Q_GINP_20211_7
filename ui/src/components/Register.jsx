@@ -1,47 +1,6 @@
 import React, { useState, useRef } from "react";
 
-
 import AuthService from "../services/auth.service";
-
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
-      </div>
-    );
-  }
-};
-
-const validEmail = (value) => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This is not a valid email.
-      </div>
-    );
-  }
-};
-
-const vusername = (value) => {
-  if (value.length < 3 || value.length > 20) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        The username must be between 3 and 20 characters.
-      </div>
-    );
-  }
-};
-
-const vpassword = (value) => {
-  if (value.length < 6 || value.length > 40) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        The password must be between 6 and 40 characters.
-      </div>
-    );
-  }
-};
 
 const Register = (props) => {
   const form = useRef();
@@ -66,8 +25,8 @@ const Register = (props) => {
 
   const onChangeDescription = (e) => {
     const description = e.target.value;
-    setDescription(description)
-  }
+    setDescription(description);
+  };
 
   const onChangePassword = (e) => {
     const password = e.target.value;
@@ -80,26 +39,25 @@ const Register = (props) => {
     setMessage("");
     setSuccessful(false);
 
+    AuthService.register(username, account, description, password).then(
+      (response) => {
+        setMessage(response.data.message);
+        setSuccessful(true);
+      },
+      (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
 
-      AuthService.register(username, account, description, password).then(
-        (response) => {
-          setMessage(response.data.message);
-          setSuccessful(true);
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-
-          setMessage(resMessage);
-          setSuccessful(false);
-        }
-      );
+        setMessage(resMessage);
+        setSuccessful(false);
+      }
+    );
   };
-  console.log(message)
+  console.log(message);
 
   return (
     <div className="col-md-12">
@@ -166,7 +124,9 @@ const Register = (props) => {
           {message && (
             <div className="form-group">
               <div
-                className={ successful ? "alert alert-success" : "alert alert-danger" }
+                className={
+                  successful ? "alert alert-success" : "alert alert-danger"
+                }
                 role="alert"
               >
                 {message}

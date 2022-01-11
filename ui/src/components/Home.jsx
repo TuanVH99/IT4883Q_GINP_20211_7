@@ -1,16 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
+import AuthService from "../services/auth.service";
 
 const socket = io(process.env.REACT_APP_API_BASE_URL);
 
 const Home = () => {
+  const currentUser = AuthService.getCurrentUser();
+
   const [message, setMessage] = useState("");
+  const [chat, setChat] = useState([]);
+  const username = currentUser.username;
 
   const handleClick = (e) => {
     e.preventDefault();
-    console.log(message);
+    //send msg to socket
+    socket.emit("sendPrivateMessage", {username, message });
     setMessage("");
   };
+
+  useEffect(() => {
+    socket.on("message", (data) => {
+      setChat([...chat, data]);
+    });
+  
+  }, [chat]);
 
   return (
     <div className="container">
@@ -26,6 +39,9 @@ const Home = () => {
         />
         <button onClick={handleClick}>send</button>
       </form>
+      {chat.map((data, index) => {
+        return <h3 key={message.id}>{data.username}: {data.message}</h3>;
+      })}
     </div>
   );
 };

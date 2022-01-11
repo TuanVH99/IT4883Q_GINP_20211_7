@@ -9,9 +9,8 @@ const bodyParser = require("body-parser");
 //-------middleware---------
 app.use(cors());
 app.use(bodyParser.json());
-//------------------------
-const PORT = process.env.BACKEND_DOCKER_PORT || 3000;
-//--------realtime-option--------
+
+//----------------
 require("./socket/index")(http);
 const { PeerServer } = require("peer");
 
@@ -25,7 +24,7 @@ const peerServer = PeerServer({
 peerServer.on("connection", (client) => {
   console.log("A peer user connected");
 });
-//--------------default-route-----------------
+//----------------
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
@@ -50,6 +49,6 @@ require("./routes/room.routes")(app);
 require("./routes/message.routes")(app);
 //-----------------------------------------
 
-http.listen(PORT, () => {
-  console.log(`App is running on port ${PORT}`);
+http.listen(3000, () => {
+  console.log("App is running on port 3000");
 });

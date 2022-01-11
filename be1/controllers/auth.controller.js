@@ -2,7 +2,6 @@ const db = require("../models");
 const user = db.user;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
-var secretKey = process.env.SECRET_KEY;
 
 const verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
@@ -14,7 +13,7 @@ const verifyToken = (req, res, next) => {
     });
   }
 
-  jwt.verify(token, secretKey, (err, decoded) => {
+  jwt.verify(token, "SECRETPASS", (err, decoded) => {
     if (err) {
       return res.status(401).json({
         message: "Unauthorized!",
@@ -94,7 +93,7 @@ const login = (req, res) => {
           .json({ message: "Password invalid", accessToken: null });
       }
 
-      var token = jwt.sign({ userid: user.userid }, secretKey, {
+      var token = jwt.sign({ userid: user.userid }, "SECRETPASS", {
         expiresIn: 86400,
       });
 
