@@ -31,25 +31,24 @@ services:
       - DB_NAME=$MYSQLDB_DATABASE
       - DB_PORT=$MYSQLDB_DOCKER_PORT
       - SECRET_KEY=$BACKEND_SECRET_KEY
-      # - CLIENT_ORIGIN=$CLIENT_ORIGIN
-      # - CLIENT_ORIGIN=http://127.0.0.1:8081
     stdin_open: true
     tty: true
     networks:
       - backend
-  # frontend:
-  #   depends_on:
-  #      - be-api
-  #   build:
-  #     context: ./ui
-  #     args:
-  #       - REACT_APP_API_BASE_URL=http://127.0.0.1:8080/api
-  #   ports:
-  #     - 3000:8081
-  #   networks:
-  #     - frontend
+      - frontend
+  frontend:
+    depends_on:
+       - backend
+    build:
+      context: ./ui
+      args:
+        - REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
+    ports:
+      - $REACT_LOCAL_PORT:$REACT_DOCKER_PORT
+    networks:
+      - frontend
 volumes:
   db: 
 networks:
-  # frontend:
+  frontend:
   backend:  

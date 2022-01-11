@@ -10,9 +10,9 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
-import BoardUser from "./components/BoardUser";
-import BoardModerator from "./components/BoardModerator";
-import BoardAdmin from "./components/BoardAdmin";
+// import BoardUser from "./components/BoardUser";
+// import BoardModerator from "./components/BoardModerator";
+// import BoardAdmin from "./components/BoardAdmin";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -40,21 +40,21 @@ const App = () => {
             </Link>
           </li>
 
-          {showModeratorBoard && (
+          {/* {showModeratorBoard && (
             <li className="nav-item">
               <Link to={"/mod"} className="nav-link">
                 Moderator Board
               </Link>
             </li>
-          )}
+          )} */}
 
-          {showAdminBoard && (
+          {/* {showAdminBoard && (
             <li className="nav-item">
               <Link to={"/admin"} className="nav-link">
                 Admin Board
               </Link>
             </li>
-          )}
+          )} */}
 
           {currentUser && (
             <li className="nav-item">

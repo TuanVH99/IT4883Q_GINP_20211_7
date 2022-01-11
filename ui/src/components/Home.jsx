@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("localhost:3000");
+const socket = io(process.env.REACT_APP_API_BASE_URL);
 
 const Home = () => {
   const [message, setMessage] = useState("");
 
   const handleClick = (e) => {
-      e.preventDefault();
-      console.log(message)
-      setMessage("")
-  }
+    e.preventDefault();
+    console.log(message);
+    setMessage("");
+  };
 
   return (
     <div className="container">
@@ -18,13 +18,13 @@ const Home = () => {
         <h3>Welcome</h3>
       </header>
       <form>
-      <input
-      placeholder="type something"
-        type="text"
-        onChange={(e) => setMessage(e.target.value)}
-        value={message}
-      />
-      <button onClick={handleClick} >send</button>
+        <input
+          placeholder="type something"
+          type="text"
+          onChange={(e) => setMessage(e.target.value)}
+          value={message}
+        />
+        <button onClick={handleClick}>send</button>
       </form>
     </div>
   );
