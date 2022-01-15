@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   mysqldb:
-    image: mysql:5.7
+    image: mysql
     restart: unless-stopped
     env_file: ./.env
     environment:
@@ -16,14 +16,14 @@ services:
     networks:
       - backend
 
-  be-api:
+  backend:
     depends_on:
       - mysqldb
-    build: ./be-api
+    build: ./be1
     restart: unless-stopped
     env_file: ./.env
     ports:
-      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+      - $BACKEND_LOCAL_PORT:$BACKEND_DOCKER_PORT
     environment:
       - DB_HOST=$MYSQLDB_HOST
       - DB_USER=$MYSQLDB_USER
