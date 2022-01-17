@@ -6,13 +6,16 @@
 ## Devide app into 3 services
 
 > actually, there are 4
-> **_Back-end: NodeJs - ExpressJs_**
+
+**_Back-end: NodeJs - ExpressJs_**
 
 - Provide end-points and api, socket events at port 3001 : 3000
 - a small video server run peer js as a broker server for peer connection like RTC at port 9001 : 9000
-  **_Front-end:ReactJs_**
+ 
+ **_Front-end:ReactJs_**
 - Stand for some client that want to use **server** service, but it has only signup and login function! Port 8081 : 8080
-  **_Database: MySQL_**
+ 
+ **_Database: MySQL_**
 - For saving data, Please access it with docker exec and show some cmd SQL query skill. Or you can build **phpmyadmin** (build yourself!)
 
 ## Running docker:
