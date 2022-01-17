@@ -26,6 +26,19 @@
     }
     ```
 -----------------
+## Route user
+- Lấy thông tn người dùng hiện tại
+    -  Method: *GET*
+    -  URL: `/api/user/info `
+    - request body: **none**
+
+- Lấy danh sách người dùng trừ người dùng hiện tại
+    -  Method: *GET*
+    -  Điều kiện: đã đăng nhập
+    -  URL: `/api/user/all `
+    - request body: **none**
+    - query: **rows** - Lấy (25 x 1 lần), bỏ qua (25 x (rows - 1))
+-----------------
 ## Route room
 
 - Lấy danh sách các phòng 1 1
@@ -45,6 +58,7 @@
     }
     ```
     - *Không thể tạo mới nếu đã nhắn tin từ trước đó*
+    - *Tạo phòng nhưng không nhắn tin sẽ tạo lỗi*
 - Lấy danh sách tin nhắn nhóm
     -  Method: *GET*
     -  URL: `/api/room/group `
@@ -101,11 +115,12 @@
 
 ------------------------------------
 ## Route message
+### Private
 
 - Lấy danh sách tin nhắn trong phòng 1 1
     -  Method: *GET*
     -  URL: `/api/message/private/:targetId`
-    > targetId: id người mà user đã nhắn tin từ trước đó
+    > **Điều kiện**: targetId: id người mà user đã nhắn tin từ trước đó
     - request body: **none**
     - query: **rows** - Lấy (25 tin nhắn 1 lần), bỏ qua (25 tin nhắn x (rows - 1))
     > Lấy không có query là 25 tin nhắn mới nhất, rows = 1 ==> lấy 25 tin nhắn kế tiếp theo thứ tự thời gian
@@ -120,10 +135,11 @@
         message: noi dung tin nhan
     }
     ```
+ ### Group
 - Lấy danh sách tin nhắn trong phòng nhóm
     -  Method: *GET*
     -  URL: `/api/message/group/:groupId`
-    > groupId: id nhóm
+    > **Điều kiện**: groupId: id nhóm
     - request body: **none**
     - query: **rows** - Lấy (25 tin nhắn 1 lần), bỏ qua (25 tin nhắn x (rows - 1))
     > Lấy không có query là 25 tin nhắn mới nhất, rows = 1 ==> lấy 25 tin nhắn kế tiếp theo thứ tự thời gian
@@ -137,3 +153,20 @@
         groupId: id cua group,
         message: noi dung tin nhan
     }
+
+----------------------
+## SoketIO Event Cheatsheet
+| Tên sự kiện | Emitter | Mô tả |
+| --- | ----------- | -- |
+| connection | 1 | Có 1 client kết nối tới server |
+| disconnected | 1 | 1 client ngắt kết nối khỏi server |
+| userOnline | 1 | 1 client Online |
+| userJoinPrivateRoom | 1 | 1 client bấm chọn 1 đoạn hội thoại, join socket của user vào socketRoom |
+| sendPrivateMessage | 1 | client gửi tin nhắn tới đoạn hội thoại chỉ có 2 người |
+| want4Call | 1 | client muốn thực hiện 1 cuộc gọi |
+| ok2Call | 1 | client sẵn sàng gọi |
+| newPrivateMessage | 0 | 1 client emit sự kiện ***sendPrivateMessage***, server thông báo đến tất cả người dùng trong phòng đó (chat room và socket room) có tin nhắn mới |
+| ready4Call | 0 | client emit sự kiện ***want4Call***, server thông báo đến client thứ 2 client 1 muốn gọi |
+| canCall | 0 | client thứ 2 emit sự kiện ***ok2Call***,  server cho broadcast 2 bên đồng ý gọi |
+
+

@@ -9,12 +9,12 @@ const Home = () => {
 
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
-  const username = currentUser.username;
+  const username = currentUser.username || {};
 
   const handleClick = (e) => {
     e.preventDefault();
     //send msg to socket
-    socket.emit("sendPrivateMessage", {username, message });
+    socket.emit("sendPrivateMessage", { username, message });
     setMessage("");
   };
 
@@ -22,7 +22,6 @@ const Home = () => {
     socket.on("message", (data) => {
       setChat([...chat, data]);
     });
-  
   }, [chat]);
 
   return (
@@ -40,7 +39,11 @@ const Home = () => {
         <button onClick={handleClick}>send</button>
       </form>
       {chat.map((data, index) => {
-        return <h3 key={message.id}>{data.username}: {data.message}</h3>;
+        return (
+          <h3 key={message.id}>
+            {data.username}: {data.message}
+          </h3>
+        );
       })}
     </div>
   );

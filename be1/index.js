@@ -11,20 +11,20 @@ app.use(cors());
 app.use(bodyParser.json());
 //----------------
 const PORT = process.env.BACKEND_DOCKER_PORT || 3000;
-//----------------
 require("./socket/index")(http);
-const { PeerServer } = require("peer");
+//----------------
+// const { PeerServer } = require("peer");
 
-const customGenerationFunction = () =>
-  (Math.random().toString(36) + "0000000000000000000").substr(2, 16);
-const peerServer = PeerServer({
-  port: 9000,
-  path: "/",
-  generateClientId: customGenerationFunction,
-});
-peerServer.on("connection", (client) => {
-  console.log("A peer user connected");
-});
+// const customGenerationFunction = () =>
+//   (Math.random().toString(36) + "0000000000000000000").substr(2, 16);
+// const peerServer = PeerServer({
+//   port: 9000,
+//   path: "/",
+//   generateClientId: customGenerationFunction,
+// });
+// peerServer.on("connection", (client) => {
+//   console.log("A peer user connected");
+// });
 //----------------
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");

@@ -16,7 +16,7 @@ services:
     networks:
       - backend
 
-  backend:
+  server:
     depends_on:
       - mysqldb
     build: ./be1
@@ -36,9 +36,23 @@ services:
     networks:
       - backend
       - frontend
+
+  videoserver:
+    depends_on:
+      - server
+    build: ./videoServer
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - $VIDEOSERVER_LOCAL_PORT:$VIDEOSERVER_DOCKER_PORT
+    stdin_open: true
+    tty: true
+    networks:
+      - backend
+
   frontend:
     depends_on:
-       - backend
+      - server
     build:
       context: ./ui
       args:
@@ -48,7 +62,7 @@ services:
     networks:
       - frontend
 volumes:
-  db:
+  db: null
 networks:
-  frontend:
-  backend:  
+  frontend: null
+  backend: null
