@@ -1,6 +1,6 @@
 # IT4883Q_GINP_20211_7
-Project: bài tập lớn học phần Phát triển phần mềm phân tán - mã hp IT4883Q, kỳ 20211, Nhóm 7
+Project: create a chat app using docker and web tech to show that the app can be built as a distributed system
 
-[Chi tiết API](https://github.com/TuanVH99/IT4883Q_GINP_20211_7/blob/main/API_Document.md)
+[API infomation](https://github.com/TuanVH99/IT4883Q_GINP_20211_7/blob/main/API_Document.md)
 
-[Chi tiết Docker](https://github.com/TuanVH99/IT4883Q_GINP_20211_7/blob/main/Docker.md)
+[Docker information](https://github.com/TuanVH99/IT4883Q_GINP_20211_7/blob/main/Docker.md)
